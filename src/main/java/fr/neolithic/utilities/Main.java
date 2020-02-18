@@ -3,8 +3,11 @@ package fr.neolithic.utilities;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.neolithic.utilities.commands.HomesExecutor;
+import fr.neolithic.utilities.utilities.Homes;
 
 public class Main extends JavaPlugin {
+    private Homes homes = new Homes();
+
     @Override
     public void onEnable() {
         registerCommands();
@@ -18,7 +21,11 @@ public class Main extends JavaPlugin {
     }
 
     private void registerCommands() {
-        HomesExecutor homesExecutor = new HomesExecutor();
+        HomesExecutor homesExecutor = new HomesExecutor(homes);
+        getCommand("sethome").setExecutor(homesExecutor);
+        getCommand("delhome").setExecutor(homesExecutor);
+        getCommand("homes").setExecutor(homesExecutor);
+        getCommand("home").setExecutor(homesExecutor);
         getCommand("bed").setExecutor(homesExecutor);
     }
 }

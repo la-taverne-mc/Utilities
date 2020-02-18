@@ -5,6 +5,18 @@ version: "1.0"
 author: PoC4
 main: fr.neolithic.utilities.Main
 commands:
+  sethome:
+    description: "Set a home for you to teleport to later"
+    permission: utilities.sethome
+  delhome:
+    description: "Delete the specified home"
+    permission: utilities.delhome
+  home:
+    description: "Teleport you to the specified home"
+    permission: utilities.home
+  homes:
+    description: "List your homes"
+    permission: utilities.homes
   bed:
     description: "Teleport you to your bed"
     permission: utilities.bed
