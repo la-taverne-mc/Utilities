@@ -1,0 +1,6 @@
+api: none
+api-version: "1.15"
+name: Utilities
+version: "1.0"
+author: PoC4
+main: fr.neolithic.utilities.Main
