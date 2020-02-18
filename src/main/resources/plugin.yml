@@ -4,3 +4,7 @@ name: Utilities
 version: "1.0"
 author: PoC4
 main: fr.neolithic.utilities.Main
+commands:
+  bed:
+    description: "Teleport you to your bed"
+    permission: utilities.bed
