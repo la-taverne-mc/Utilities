@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,21 @@ public class Homes {
         }
         
         return false;
+    }
+
+    public void loadHomes(List<SerializedHome> serializedHomes) {
+        for (SerializedHome serializedHome : serializedHomes) {
+            deserialize(serializedHome);
+        }
+    }
+
+    public void deserialize(SerializedHome serializedHome) {
+        UUID uuid = UUID.fromString(serializedHome.uuid());
+
+        if (!homes.containsKey(uuid)) homes.put(uuid, new PlayerHomes(uuid));
+
+        homes.get(uuid).addHome(serializedHome.home(), new Location(Bukkit.getWorld(UUID.fromString(serializedHome.world())),
+            serializedHome.x(), serializedHome.y(), serializedHome.z(), serializedHome.yaw(), serializedHome.pitch()));
     }
 
     public @Nullable List<SerializedHome> serialize() {

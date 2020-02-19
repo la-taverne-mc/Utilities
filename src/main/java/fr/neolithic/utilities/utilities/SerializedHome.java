@@ -18,12 +18,23 @@ public final class SerializedHome {
     public SerializedHome(@NotNull UUID uuid, @NotNull String home, @NotNull Location location) {
         this.uuid = uuid.toString();
         this.home = home;
-        this.world = location.getWorld().getName();
+        this.world = location.getWorld().getUID().toString();
         this.x = location.getX();
         this.y = location.getY();
         this.z = location.getZ();
         this.yaw = location.getYaw();
         this.pitch = location.getPitch();
+    }
+
+    public SerializedHome(@NotNull String uuid, @NotNull String home, @NotNull String world, @NotNull double x, @NotNull double y, @NotNull double z, @NotNull float yaw, @NotNull float pitch) {
+        this.uuid = uuid;
+        this.home = home;
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.yaw = yaw;
+        this.pitch = pitch;
     }
 
     public String uuid() { return uuid; }
