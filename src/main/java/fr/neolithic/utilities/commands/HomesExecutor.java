@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -38,6 +39,16 @@ public class HomesExecutor implements TabExecutor {
 
                     if (home.equalsIgnoreCase("bed")) {
                         player.sendMessage("§cLe home '" + home + "' existe déjà");
+                        return false;
+                    }
+
+                    if (!StringUtils.isAlphanumeric(home)) {
+                        player.sendMessage("§cLe nom d'un home ne peut que comporter des chiffres et des lettres");
+                        return false;
+                    }
+
+                    if (home.length() > 16) {
+                        player.sendMessage("§cLe nom d'un home ne peut pas faire plus de 16 caractères");
                         return false;
                     }
 

@@ -5,12 +5,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.common.collect.Lists;
+
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class Homes {
     private HashMap<UUID, PlayerHomes> homes = new HashMap<UUID, PlayerHomes>();
+
+    private Database db;
+
+    public Homes(Database db) {
+        this.db = db;
+    }
 
     public @Nullable List<String> getPlayerHomes(@NotNull UUID playerUuid) {
         if (!homes.containsKey(playerUuid)) return null;
@@ -22,9 +30,14 @@ public class Homes {
     }
 
     public boolean addHome(@NotNull UUID playerUuid, @NotNull String home, @NotNull Location location) {
-        if (!homes.containsKey(playerUuid)) homes.put(playerUuid, new PlayerHomes());
+        if (!homes.containsKey(playerUuid)) homes.put(playerUuid, new PlayerHomes(playerUuid));
 
-        return homes.get(playerUuid).addHome(home, getApproximativeLocation(location));
+        if (homes.get(playerUuid).addHome(home, getApproximativeLocation(location))) {
+            db.addHome(new SerializedHome(playerUuid, home, getApproximativeLocation(location)));
+            return true;
+        }
+
+        return false;
     }
 
     public @Nullable Location getHomeLocation(@NotNull UUID playerUuid, @NotNull String home) {
@@ -35,8 +48,31 @@ public class Homes {
 
     public boolean deleteHome(@NotNull UUID playerUuid, @NotNull String home) {
         if (!homes.containsKey(playerUuid)) return false;
+
+        if (homes.get(playerUuid).deleteHome(home)) {
+            
+            return true;
+        }
         
-        return homes.get(playerUuid).deleteHome(home);
+        return false;
+    }
+
+    public @Nullable List<SerializedHome> serialize() {
+        if (homes.isEmpty()) return null;
+        
+        List<SerializedHome> serializedHomes = Lists.newArrayList();
+
+        for (PlayerHomes home : homes.values()) {
+            List<SerializedHome> playerHomes = home.serialize();
+
+            if (playerHomes == null) continue;
+
+            for (SerializedHome serializedHome : playerHomes) {
+                serializedHomes.add(serializedHome);
+            }
+        }
+
+        return serializedHomes;
     }
 
     private Location getApproximativeLocation(@NotNull Location location) {
