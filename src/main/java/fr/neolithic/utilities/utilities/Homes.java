@@ -50,7 +50,7 @@ public class Homes {
         if (!homes.containsKey(playerUuid)) return false;
 
         if (homes.get(playerUuid).deleteHome(home)) {
-            
+            db.deleteHome(playerUuid.toString(), home);
             return true;
         }
         

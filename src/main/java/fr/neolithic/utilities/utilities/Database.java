@@ -92,13 +92,31 @@ public class Database {
             @Override
             public void run() {
                 try {
-                    String command = String.join("",
+                    statement.execute(String.join("",
                         "INSERT INTO `utilities_homes`(`uuid`, `home`, `world`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES ('",
                         serializedHome.uuid() + "','" + serializedHome.home() + "','" + serializedHome.world() + "',",
                         serializedHome.x() + "," + serializedHome.y() + "," + serializedHome.z() + ",",
                         serializedHome.yaw() + "," + serializedHome.pitch() + ");"
-                    );
-                    statement.execute(command);
+                    ));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public void deleteHome(@NotNull String playerUuid, @NotNull String home) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "DELETE FROM `utilities_homes` WHERE ",
+                        "`uuid` = '" + playerUuid + "' AND ",
+                        "`home` = '" + home + "'"
+                    ));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
