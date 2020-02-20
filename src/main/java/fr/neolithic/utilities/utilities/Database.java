@@ -11,6 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import fr.neolithic.utilities.utilities.homes.SerializedHome;
+
 public class Database {
     private Plugin plugin;
 
@@ -61,7 +63,7 @@ public class Database {
                 "`id` int(11) NOT NULL AUTO_INCREMENT, ",
                 "`uuid` varchar(36) NOT NULL, ",
                 "`home` varchar(16) NOT NULL, ",
-                "`world` varchar(36) NOT NULL, ",
+                "`worldUuid` varchar(36) NOT NULL, ",
                 "`x` double NOT NULL, ",
                 "`y` double NOT NULL, ",
                 "`z` double NOT NULL, ",
@@ -74,6 +76,16 @@ public class Database {
         catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        try {
+            statement.execute(String.join("",
+                "INSERT INTO `utilities_homes`(`id`, `uuid`, `home`, `worldUuid`, `x`, `y`, `z`, `yaw`, `pitch`) ",
+                "VALUES (1,'00000000-0000-0000-0000-000000000000','notspawn','00000000-0000-0000-0000-000000000000',0,0,0,0,0)"
+            ));
+        }
+        catch (SQLException e) {
+            if (e.getErrorCode() != 1062) e.printStackTrace();
+        }
     }
 
     public void addHome(SerializedHome serializedHome) {
@@ -82,8 +94,8 @@ public class Database {
             public void run() {
                 try {
                     statement.execute(String.join("",
-                        "INSERT INTO `utilities_homes`(`uuid`, `home`, `world`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES ('",
-                        serializedHome.uuid() + "','" + serializedHome.home() + "','" + serializedHome.world() + "',",
+                        "INSERT INTO `utilities_homes`(`uuid`, `home`, `worldUuid`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES ('",
+                        serializedHome.uuid() + "','" + serializedHome.home() + "','" + serializedHome.worldUuid() + "',",
                         serializedHome.x() + "," + serializedHome.y() + "," + serializedHome.z() + ",",
                         serializedHome.yaw() + "," + serializedHome.pitch() + ");"
                     ));
@@ -126,5 +138,62 @@ public class Database {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void setSpawn(@NotNull String worldUuid, @NotNull double x, @NotNull double y, @NotNull double z, @NotNull float yaw, @NotNull float pitch) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "UPDATE `utilities_homes` SET ",
+                        "`home` = 'spawn', ",
+                        "`worldUuid` = '" + worldUuid + "', ",
+                        "`x` = " + x + ", ",
+                        "`y` = " + y + ", ",
+                        "`z` = " + z + ", ",
+                        "`yaw` = " + yaw + ", ",
+                        "`pitch` = " + pitch + " ",
+                        "WHERE `id` = 1"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public ResultSet getSpawn() {
+        try {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM `utilities_homes` WHERE `id` = 1");
+            return resultSet;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deleteSpawn() {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "UPDATE `utilities_homes` SET ",
+                        "`home` = 'notspawn' ",
+                        "WHERE `id` = 1"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
     }
 }

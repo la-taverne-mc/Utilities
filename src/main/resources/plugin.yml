@@ -20,3 +20,12 @@ commands:
   bed:
     description: "Teleport you to your bed"
     permission: utilities.bed
+  setspawn:
+    description: "Set the spawn location"
+    permission: utilities.setspawn
+  delspawn:
+    description: "Delete the spawn"
+    permission: utilities.delspawn
+  spawn:
+    description: "Teleport you to spawn"
+    permission: utilities.spawn

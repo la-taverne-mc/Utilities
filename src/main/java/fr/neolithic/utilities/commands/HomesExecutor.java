@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.Homes;
+import fr.neolithic.utilities.utilities.homes.Homes;
 
 public class HomesExecutor implements TabExecutor {
     private Homes homes;

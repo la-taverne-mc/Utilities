@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities;
+package fr.neolithic.utilities.utilities.homes;
 
 import java.util.ArrayList;
 import java.util.HashMap;

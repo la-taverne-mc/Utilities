@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities;
+package fr.neolithic.utilities.utilities.homes;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import fr.neolithic.utilities.utilities.Database;
 
 public class Homes {
     private HashMap<UUID, PlayerHomes> homes = new HashMap<UUID, PlayerHomes>();
@@ -69,7 +71,7 @@ public class Homes {
 
         if (!homes.containsKey(uuid)) homes.put(uuid, new PlayerHomes(uuid));
 
-        homes.get(uuid).addHome(serializedHome.home(), new Location(Bukkit.getWorld(UUID.fromString(serializedHome.world())),
+        homes.get(uuid).addHome(serializedHome.home(), new Location(Bukkit.getWorld(UUID.fromString(serializedHome.worldUuid())),
             serializedHome.x(), serializedHome.y(), serializedHome.z(), serializedHome.yaw(), serializedHome.pitch()));
     }
 

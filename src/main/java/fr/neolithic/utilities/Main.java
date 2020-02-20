@@ -3,25 +3,31 @@ package fr.neolithic.utilities;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.common.collect.Lists;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.neolithic.utilities.commands.HomesExecutor;
+import fr.neolithic.utilities.commands.SpawnExecutor;
 import fr.neolithic.utilities.utilities.Database;
 import fr.neolithic.utilities.utilities.FileManager;
-import fr.neolithic.utilities.utilities.Homes;
-import fr.neolithic.utilities.utilities.SerializedHome;
+import fr.neolithic.utilities.utilities.homes.Homes;
+import fr.neolithic.utilities.utilities.homes.SerializedHome;
 
 public class Main extends JavaPlugin {
+    private Database db;
+
     private Homes homes;
+
+    private Location spawn = null;
 
     private FileManager saveFile;
     private FileConfiguration saveContent;
-
-    Database db;
 
     @Override
     public void onEnable() {
@@ -29,6 +35,8 @@ public class Main extends JavaPlugin {
 
         homes = new Homes(db);
         loadHomes();
+
+        loadSpawn();
 
         registerCommands();
 
@@ -47,6 +55,11 @@ public class Main extends JavaPlugin {
         getCommand("homes").setExecutor(homesExecutor);
         getCommand("home").setExecutor(homesExecutor);
         getCommand("bed").setExecutor(homesExecutor);
+
+        SpawnExecutor spawnExecutor = new SpawnExecutor(spawn, db);
+        getCommand("setspawn").setExecutor(spawnExecutor);
+        getCommand("delspawn").setExecutor(spawnExecutor);
+        getCommand("spawn").setExecutor(spawnExecutor);
     }
 
     private void loadDatabase() {
@@ -76,13 +89,29 @@ public class Main extends JavaPlugin {
             List<SerializedHome> serializedHomes = Lists.newArrayList();
 
             while (resultSet.next()) {
-                SerializedHome serializedHome = new SerializedHome(resultSet.getString("uuid"), resultSet.getString("home"), resultSet.getString("world"),
+                SerializedHome serializedHome = new SerializedHome(resultSet.getString("uuid"), resultSet.getString("home"), resultSet.getString("worldUuid"),
                     resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"), resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
                 serializedHomes.add(serializedHome);
             }
 
             homes.loadHomes(serializedHomes);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadSpawn() {
+        try {
+            ResultSet resultSet = db.getSpawn();
+
+            if (resultSet.next() && resultSet.getString("home").equalsIgnoreCase("spawn")) {
+                spawn = new Location (Bukkit.getWorld(UUID.fromString(resultSet.getString("worldUuid"))),
+                    resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"),
+                    resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
+            }
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
     }
