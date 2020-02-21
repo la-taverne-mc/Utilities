@@ -13,13 +13,16 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
 import fr.neolithic.utilities.utilities.homes.Homes;
 
 public class HomesExecutor implements TabExecutor {
     private Homes homes;
+    private PlayersLastLocation playersLastLocation;
 
-    public HomesExecutor(Homes homes) {
+    public HomesExecutor(Homes homes, PlayersLastLocation playersLastLocation) {
         this.homes = homes;
+        this.playersLastLocation = playersLastLocation;
     }
 
     @Override
@@ -114,6 +117,7 @@ public class HomesExecutor implements TabExecutor {
                         }
     
                         player.sendMessage("§eTéléportation en cours...");
+                        playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
                         player.teleport(player.getBedSpawnLocation());
 
                         return true;
@@ -127,6 +131,7 @@ public class HomesExecutor implements TabExecutor {
                     }
 
                     player.sendMessage("§eTéléportation en cours...");
+                    playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
                     player.teleport(loc);
 
                     return true;
@@ -138,6 +143,7 @@ public class HomesExecutor implements TabExecutor {
                     }
 
                     player.sendMessage("§eTéléportation en cours...");
+                    playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
                     player.teleport(player.getBedSpawnLocation());
 
                     return true;

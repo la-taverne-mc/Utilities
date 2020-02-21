@@ -11,13 +11,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.neolithic.utilities.utilities.Database;
+import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
 
 public class SpawnExecutor implements TabExecutor {
     private Location spawn;
+    private PlayersLastLocation playersLastLocation;
     private Database db;
 
-    public SpawnExecutor(Location spawn, Database db) {
+    public SpawnExecutor(Location spawn, PlayersLastLocation playersLastLocation, Database db) {
         this.spawn = spawn;
+        this.playersLastLocation = playersLastLocation;
         this.db = db;
     }
 
@@ -48,6 +51,7 @@ public class SpawnExecutor implements TabExecutor {
                     }
 
                     player.sendMessage("§eTéléportation en cours...");
+                    playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
                     player.teleport(spawn);
 
                     return true;

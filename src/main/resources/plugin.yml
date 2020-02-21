@@ -29,3 +29,6 @@ commands:
   spawn:
     description: "Teleport you to spawn"
     permission: utilities.spawn
+  back:
+    description: "Teleport you back to your last location"
+    permission: utilities.back

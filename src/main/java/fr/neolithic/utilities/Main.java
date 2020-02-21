@@ -13,9 +13,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.neolithic.utilities.commands.HomesExecutor;
+import fr.neolithic.utilities.commands.MiscellaneousExecutor;
 import fr.neolithic.utilities.commands.SpawnExecutor;
 import fr.neolithic.utilities.utilities.Database;
 import fr.neolithic.utilities.utilities.FileManager;
+import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
+import fr.neolithic.utilities.utilities.back.SerializedPlayerLastLocation;
 import fr.neolithic.utilities.utilities.homes.Homes;
 import fr.neolithic.utilities.utilities.homes.SerializedHome;
 
@@ -23,6 +26,7 @@ public class Main extends JavaPlugin {
     private Database db;
 
     private Homes homes;
+    private PlayersLastLocation playersLastLocation = new PlayersLastLocation();
 
     private Location spawn = null;
 
@@ -35,6 +39,7 @@ public class Main extends JavaPlugin {
 
         homes = new Homes(db);
         loadHomes();
+        loadPlayersLastLocations();
 
         loadSpawn();
 
@@ -45,21 +50,26 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        savePlayersLastLocations();
+
         System.out.println("[Utilities] Successfully Disabled Utilities v1.0");
     }
 
     private void registerCommands() {
-        HomesExecutor homesExecutor = new HomesExecutor(homes);
+        HomesExecutor homesExecutor = new HomesExecutor(homes, playersLastLocation);
         getCommand("sethome").setExecutor(homesExecutor);
         getCommand("delhome").setExecutor(homesExecutor);
         getCommand("homes").setExecutor(homesExecutor);
         getCommand("home").setExecutor(homesExecutor);
         getCommand("bed").setExecutor(homesExecutor);
 
-        SpawnExecutor spawnExecutor = new SpawnExecutor(spawn, db);
+        SpawnExecutor spawnExecutor = new SpawnExecutor(spawn, playersLastLocation, db);
         getCommand("setspawn").setExecutor(spawnExecutor);
         getCommand("delspawn").setExecutor(spawnExecutor);
         getCommand("spawn").setExecutor(spawnExecutor);
+
+        MiscellaneousExecutor miscellaneousExecutor = new MiscellaneousExecutor(playersLastLocation);
+        getCommand("back").setExecutor(miscellaneousExecutor);
     }
 
     private void loadDatabase() {
@@ -114,5 +124,30 @@ public class Main extends JavaPlugin {
         catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadPlayersLastLocations() {
+        try {
+            ResultSet resultSet = db.getPlayersLastLocations();
+            List<SerializedPlayerLastLocation> serializedPlayerLastLocations = Lists.newArrayList();
+
+            while (resultSet.next()) {
+                SerializedPlayerLastLocation serializedPlayerLastLocation = new SerializedPlayerLastLocation(resultSet.getString("playerUuid"), resultSet.getString("worldUuid"),
+                    resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"), resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
+                
+                System.out.println(serializedPlayerLastLocation.toString());
+                
+                serializedPlayerLastLocations.add(serializedPlayerLastLocation);
+            }
+
+            if (!serializedPlayerLastLocations.isEmpty()) playersLastLocation.deserialize(serializedPlayerLastLocations);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void savePlayersLastLocations() {
+        db.savePlayersLastLocations(playersLastLocation.serialize());
     }
 }

@@ -5,12 +5,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import fr.neolithic.utilities.utilities.back.SerializedPlayerLastLocation;
 import fr.neolithic.utilities.utilities.homes.SerializedHome;
 
 public class Database {
@@ -72,6 +74,18 @@ public class Database {
                 "PRIMARY KEY (`id`)",
                 ") CHARSET=latin1;"
             ));
+            statement.execute(String.join("",
+                "CREATE TABLE IF NOT EXISTS `utilities_last_locations` (",
+                "`playerUuid` varchar(36) NOT NULL, ",
+                "`worldUuid` varchar(36) NOT NULL, ",
+                "`x` double NOT NULL, ",
+                "`y` double NOT NULL, ",
+                "`z` double NOT NULL, ",
+                "`yaw` float NOT NULL, ",
+                "`pitch` float NOT NULL, ",
+                "PRIMARY KEY (`playerUuid`)",
+                ") CHARSET=latin1;"
+            ));
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -80,11 +94,12 @@ public class Database {
         try {
             statement.execute(String.join("",
                 "INSERT INTO `utilities_homes`(`id`, `uuid`, `home`, `worldUuid`, `x`, `y`, `z`, `yaw`, `pitch`) ",
-                "VALUES (1,'00000000-0000-0000-0000-000000000000','notspawn','00000000-0000-0000-0000-000000000000',0,0,0,0,0)"
+                "VALUES (1,'00000000-0000-0000-0000-000000000000','notspawn','00000000-0000-0000-0000-000000000000',0,0,0,0,0) ",
+                "ON DUPLICATE KEY UPDATE `id` = id"
             ));
         }
         catch (SQLException e) {
-            if (e.getErrorCode() != 1062) e.printStackTrace();
+            e.printStackTrace();
         }
     }
 
@@ -195,5 +210,47 @@ public class Database {
         };
 
         runnable.runTaskAsynchronously(plugin);
+    }
+
+    public ResultSet getPlayersLastLocations() {
+        try {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM `utilities_last_locations`");
+            return resultSet;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void savePlayersLastLocations(List<SerializedPlayerLastLocation> serializedPlayerLastLocations) {
+        try {
+            if (serializedPlayerLastLocations != null) {
+                for (SerializedPlayerLastLocation serializedPlayerLastLocation : serializedPlayerLastLocations) {
+                    statement.addBatch(String.join("",
+                        "INSERT INTO `utilities_last_locations`(`playerUuid`, `worldUuid`, `x`, `y`, `z`, `yaw`, `pitch`) VALUES ('",
+                        serializedPlayerLastLocation.playerUuid() + "', '",
+                        serializedPlayerLastLocation.worldUuid() + "', ",
+                        serializedPlayerLastLocation.x() + ", ",
+                        serializedPlayerLastLocation.y() + ", ",
+                        serializedPlayerLastLocation.z() + ", ",
+                        serializedPlayerLastLocation.yaw() + ", ",
+                        serializedPlayerLastLocation.pitch() + ") ",
+                        "ON DUPLICATE KEY UPDATE ",
+                        "`worldUuid` = '" + serializedPlayerLastLocation.worldUuid() + "', ",
+                        "`x` = " + serializedPlayerLastLocation.x() + ", ",
+                        "`y` = " + serializedPlayerLastLocation.y() + ", ",
+                        "`z` = " + serializedPlayerLastLocation.z() + ", ",
+                        "`yaw` = " + serializedPlayerLastLocation.yaw() + ", ",
+                        "`pitch` = " + serializedPlayerLastLocation.pitch()
+                    ));
+                }
+    
+                statement.executeBatch();
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
