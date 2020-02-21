@@ -120,7 +120,15 @@ public class MiscellaneousExecutor implements TabExecutor {
 
                     player.sendMessage("§cUsage : /god [username]");
                     return false;
-                
+                    
+                case "heal":
+                    player.setHealth(20);
+                    player.setFoodLevel(20);
+                    player.setSaturation(20.f);
+                    return true;
+                case "feed":
+                    player.setFoodLevel(20);
+                    player.setSaturation(20.f);
                 default:
                     return false;
             }

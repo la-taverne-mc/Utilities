@@ -38,3 +38,9 @@ commands:
   god:
     description: "Toggle godmode"
     permission: utilities.god
+  heal:
+    description: "heal yourself"
+    permission: utilities.heal
+  feed:
+    description: "feed yourself"
+    permission: utilities.feed

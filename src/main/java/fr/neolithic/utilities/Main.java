@@ -72,6 +72,8 @@ public class Main extends JavaPlugin {
         getCommand("back").setExecutor(miscellaneousExecutor);
         getCommand("fly").setExecutor(miscellaneousExecutor);
         getCommand("god").setExecutor(miscellaneousExecutor);
+        getCommand("heal").setExecutor(miscellaneousExecutor);
+        getCommand("feed").setExecutor(miscellaneousExecutor);
     }
 
     private void loadDatabase() {
