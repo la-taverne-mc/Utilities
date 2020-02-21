@@ -160,22 +160,20 @@ public class HomesExecutor implements TabExecutor {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (!(sender instanceof Player)) return null;
 
-        if (command.getName().equalsIgnoreCase("delhome") || command.getName().equalsIgnoreCase("home")) {
-            if (args.length == 1) {
-                List<String> list = Lists.newArrayList();
-                Player player = (Player) sender;
-                List<String> playerHomes = homes.getPlayerHomes(player.getUniqueId());
+        if ((command.getName().equalsIgnoreCase("delhome") || command.getName().equalsIgnoreCase("home")) && args.length == 1) {
+            List<String> list = Lists.newArrayList();
+            Player player = (Player) sender;
+            List<String> playerHomes = homes.getPlayerHomes(player.getUniqueId());
 
-                if (playerHomes == null) return null;
+            if (playerHomes == null) return null;
 
-                for (String home : playerHomes) {
-                    if (home.toLowerCase().startsWith(args[0].toLowerCase())) {
-                        list.add(home);
-                    }
+            for (String home : playerHomes) {
+                if (home.toLowerCase().startsWith(args[0].toLowerCase())) {
+                    list.add(home);
                 }
-
-                return list;
             }
+
+            return list;
         }
         
         return null;

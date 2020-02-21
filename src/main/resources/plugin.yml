@@ -32,3 +32,9 @@ commands:
   back:
     description: "Teleport you back to your last location"
     permission: utilities.back
+  fly:
+    description: "Toggle fly"
+    permission: utilities.fly
+  god:
+    description: "Toggle godmode"
+    permission: utilities.god

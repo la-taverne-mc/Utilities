@@ -70,6 +70,8 @@ public class Main extends JavaPlugin {
 
         MiscellaneousExecutor miscellaneousExecutor = new MiscellaneousExecutor(playersLastLocation);
         getCommand("back").setExecutor(miscellaneousExecutor);
+        getCommand("fly").setExecutor(miscellaneousExecutor);
+        getCommand("god").setExecutor(miscellaneousExecutor);
     }
 
     private void loadDatabase() {
