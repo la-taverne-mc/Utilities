@@ -39,8 +39,8 @@ commands:
     description: "Toggle godmode"
     permission: utilities.god
   heal:
-    description: "heal yourself"
+    description: "Heal yourself or a targeted player"
     permission: utilities.heal
   feed:
-    description: "feed yourself"
+    description: "Feed yourself or a targeted player"
     permission: utilities.feed

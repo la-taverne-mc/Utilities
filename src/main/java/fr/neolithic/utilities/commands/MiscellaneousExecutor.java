@@ -89,12 +89,16 @@ public class MiscellaneousExecutor implements TabExecutor {
 
                         if (target != null && target.isOnline()) {
                             if (target.isInvulnerable()) {
-                                player.sendMessage("§eGod mode §cdésactivé §epour '" + target.getName() + "'");
+                                if (!player.getName().equals(target.getName())) {
+                                    player.sendMessage("§eGod mode §cdésactivé §epour '" + target.getName() + "'");
+                                }
                                 target.sendMessage("§eGod mode §cdésactivé");
                                 player.setInvulnerable(false);
                             }
                             else {
-                                player.sendMessage("§eGod mode §aactivé §epour '" + target.getName() + "'");
+                                if (!player.getName().equals(target.getName())) {
+                                    player.sendMessage("§eGod mode §aactivé §epour '" + target.getName() + "'");
+                                }
                                 target.sendMessage("§eGod mode §aactivé");
                                 player.setInvulnerable(true);
                             }
@@ -122,13 +126,65 @@ public class MiscellaneousExecutor implements TabExecutor {
                     return false;
                     
                 case "heal":
-                    player.setHealth(20);
-                    player.setFoodLevel(20);
-                    player.setSaturation(20.f);
-                    return true;
+                    if (args.length == 1) {
+                        Player target = Bukkit.getPlayer(args[0]);
+
+                        if (target != null && target.isOnline()) {
+                            if (!player.getName().equals(target.getName())) {
+                                player.sendMessage("§eLe joueur '" + target.getName() + "' a été heal");
+                            }
+                            target.sendMessage("§eTu as été heal");
+                            player.setHealth(20);
+                            player.setFoodLevel(20);
+                            player.setSaturation(20.f);
+
+                            return true;
+                        }
+
+                        player.sendMessage("§cLe joueur '" + args[0] + "' n'existe pas ou n'est pas en ligne");
+                        return false;
+                    }
+                    else if (args.length == 0) {
+                        player.sendMessage("§eTu as été heal");
+                        player.setHealth(20);
+                        player.setFoodLevel(20);
+                        player.setSaturation(20.f);
+
+                        return true;
+                    }
+
+                    player.sendMessage("§cUsage : /heal [username]");
+                    return false;
+
                 case "feed":
-                    player.setFoodLevel(20);
-                    player.setSaturation(20.f);
+                    if (args.length == 1) {
+                        Player target = Bukkit.getPlayer(args[0]);
+
+                        if (target != null && target.isOnline()) {
+                            if (!player.getName().equals(target.getName())) {
+                                player.sendMessage("§eLe joueur '" + target.getName() + "' a été feed");
+                            }
+                            target.sendMessage("§eTu as été feed");
+                            player.setFoodLevel(20);
+                            player.setSaturation(20.f);
+
+                            return true;
+                        }
+
+                        player.sendMessage("§cLe joueur '" + args[0] + "' n'existe pas ou n'est pas en ligne");
+                        return false;
+                    }
+                    else if (args.length == 0) {
+                        player.sendMessage("§eTu as été feed");
+                        player.setFoodLevel(20);
+                        player.setSaturation(20.f);
+
+                        return true;
+                    }
+
+                    player.sendMessage("§cUsage : /feed [username]");
+                    return false;
+
                 default:
                     return false;
             }
