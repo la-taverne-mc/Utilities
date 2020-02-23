@@ -51,14 +51,14 @@ public class MiscellaneousExecutor implements TabExecutor {
                                     player.sendMessage("§eFly mode §cdésactivé §epour '" + target.getName() + "'");
                                 }
                                 target.sendMessage("§eFly mode §cdésactivé");
-                                player.setAllowFlight(false);
+                                target.setAllowFlight(false);
                             }
                             else {
                                 if (!player.getName().equals(target.getName())) {
                                     player.sendMessage("§eFly mode §aactivé §epour '" + target.getName() + "'");
                                 }
                                 target.sendMessage("§eFly mode §aactivé");
-                                player.setAllowFlight(true);
+                                target.setAllowFlight(true);
                             }
 
                             return true;
@@ -93,14 +93,14 @@ public class MiscellaneousExecutor implements TabExecutor {
                                     player.sendMessage("§eGod mode §cdésactivé §epour '" + target.getName() + "'");
                                 }
                                 target.sendMessage("§eGod mode §cdésactivé");
-                                player.setInvulnerable(false);
+                                target.setInvulnerable(false);
                             }
                             else {
                                 if (!player.getName().equals(target.getName())) {
                                     player.sendMessage("§eGod mode §aactivé §epour '" + target.getName() + "'");
                                 }
                                 target.sendMessage("§eGod mode §aactivé");
-                                player.setInvulnerable(true);
+                                target.setInvulnerable(true);
                             }
 
                             return true;
