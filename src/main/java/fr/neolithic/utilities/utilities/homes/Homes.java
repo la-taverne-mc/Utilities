@@ -1,5 +1,7 @@
 package fr.neolithic.utilities.utilities.homes;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,22 @@ public class Homes {
 
     public Homes(Database db) {
         this.db = db;
+
+        try {
+            ResultSet resultSet = db.getHomes();
+            List<SerializedHome> serializedHomes = Lists.newArrayList();
+
+            while (resultSet.next()) {
+                SerializedHome serializedHome = new SerializedHome(resultSet.getString("uuid"), resultSet.getString("home"), resultSet.getString("worldUuid"),
+                    resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"), resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
+                serializedHomes.add(serializedHome);
+            }
+
+            loadHomes(serializedHomes);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public @Nullable List<String> getPlayerHomes(@NotNull UUID playerUuid) {

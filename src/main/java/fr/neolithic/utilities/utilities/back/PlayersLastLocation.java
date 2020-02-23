@@ -1,5 +1,7 @@
 package fr.neolithic.utilities.utilities.back;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -12,8 +14,29 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import fr.neolithic.utilities.utilities.Database;
+
 public class PlayersLastLocation {
     private HashMap<UUID, Location> playersLastLocation = new HashMap<UUID, Location>();
+
+    public PlayersLastLocation(Database db) {
+        try {
+            ResultSet resultSet = db.getPlayersLastLocations();
+            List<SerializedPlayerLastLocation> serializedPlayerLastLocations = Lists.newArrayList();
+
+            while (resultSet.next()) {
+                SerializedPlayerLastLocation serializedPlayerLastLocation = new SerializedPlayerLastLocation(resultSet.getString("playerUuid"), resultSet.getString("worldUuid"),
+                    resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"), resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
+                
+                serializedPlayerLastLocations.add(serializedPlayerLastLocation);
+            }
+
+            if (!serializedPlayerLastLocations.isEmpty()) deserialize(serializedPlayerLastLocations);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void setPlayerLastLocation(@NotNull UUID playerUuid, @NotNull Location location) {
         if (playersLastLocation.containsKey(playerUuid)) {

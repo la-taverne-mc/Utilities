@@ -1,7 +1,11 @@
 package fr.neolithic.utilities.commands;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,14 +18,26 @@ import fr.neolithic.utilities.utilities.Database;
 import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
 
 public class SpawnExecutor implements TabExecutor {
-    private Location spawn;
+    private Location spawn = null;
     private PlayersLastLocation playersLastLocation;
     private Database db;
 
-    public SpawnExecutor(Location spawn, PlayersLastLocation playersLastLocation, Database db) {
-        this.spawn = spawn;
+    public SpawnExecutor(@NotNull Database db, @NotNull PlayersLastLocation playersLastLocation) {
         this.playersLastLocation = playersLastLocation;
         this.db = db;
+
+        try {
+            ResultSet resultSet = db.getSpawn();
+
+            if (resultSet.next() && resultSet.getString("home").equalsIgnoreCase("spawn")) {
+                spawn = new Location (Bukkit.getWorld(UUID.fromString(resultSet.getString("worldUuid"))),
+                    resultSet.getDouble("x"), resultSet.getDouble("y"), resultSet.getDouble("z"),
+                    resultSet.getFloat("yaw"), resultSet.getFloat("pitch"));
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

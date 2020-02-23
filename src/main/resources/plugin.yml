@@ -5,6 +5,18 @@ version: "1.0"
 author: PoC4
 main: fr.neolithic.utilities.Main
 commands:
+  addmaxhomes:
+    description: "Add one or the specified amount of max homes to a player"
+    permission: utilities.addmaxhomes
+  subtractmaxhomes:
+    description: "Substract one or the specified amount of max homes to a player"
+    permission: utilities.subtractmaxhomes
+  setmaxhomes:
+    description: "Set the max homes amount of a player"
+    permission: utilities.setmaxhomes
+  resetmaxhomes:
+    description: "Reset the max homes amount of a player"
+    permission: utilities.resetmaxhomes
   sethome:
     description: "Set a home for you to teleport to later"
     permission: utilities.sethome
@@ -44,3 +56,45 @@ commands:
   feed:
     description: "Feed yourself or a targeted player"
     permission: utilities.feed
+permissions:
+  utilities.*:
+    default: false
+    children:
+      utilities.addmaxhomes:
+        default: op
+      utilities.subtractmaxhomes:
+        default: op
+      utilities.setmaxhomes:
+        default: op
+      utilities.resetmaxhomes:
+        default: op
+      utilities.maxhomes.unlimited:
+        default: op
+      utilities.sethome:
+        default: true
+      utilities.delhome:
+        default: true
+      utilities.homes:
+        default: true
+      utilities.home:
+        default: true
+      utilities.bed:
+        default: true
+      utilities.setspawn:
+        default: op
+      utilities.delspawn:
+        default: op
+      utilities.spawn:
+        default: true
+      utilities.back:
+        default: true
+      utilities.back.ondeath:
+        default: true
+      utilities.fly:
+        default: op
+      utilities.god:
+        default: op
+      utilities.heal:
+        default: op
+      utilities.feed:
+        default: op

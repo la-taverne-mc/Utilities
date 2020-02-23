@@ -60,7 +60,7 @@ public class Database {
 
     private void createDefaultTable() {
         try {
-            statement.execute(String.join("",
+            statement.addBatch(String.join("",
                 "CREATE TABLE IF NOT EXISTS `utilities_homes` (",
                 "`id` int(11) NOT NULL AUTO_INCREMENT, ",
                 "`uuid` varchar(36) NOT NULL, ",
@@ -74,7 +74,8 @@ public class Database {
                 "PRIMARY KEY (`id`)",
                 ") CHARSET=latin1;"
             ));
-            statement.execute(String.join("",
+
+            statement.addBatch(String.join("",
                 "CREATE TABLE IF NOT EXISTS `utilities_last_locations` (",
                 "`playerUuid` varchar(36) NOT NULL, ",
                 "`worldUuid` varchar(36) NOT NULL, ",
@@ -86,6 +87,17 @@ public class Database {
                 "PRIMARY KEY (`playerUuid`)",
                 ") CHARSET=latin1;"
             ));
+
+            statement.addBatch(String.join("",
+                "CREATE TABLE IF NOT EXISTS `utilities_max_homes` (",
+                "`playerUuid` varchar(36) NOT NULL, ",
+                "`maxHomes` int(11) NOT NULL, ",
+                "`isRelative` tinyint(1) NOT NULL, ",
+                "PRIMARY KEY (`playerUuid`)",
+                ") CHARSET=latin1;"
+            ));
+
+            statement.executeBatch();
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -100,6 +112,108 @@ public class Database {
         }
         catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addMaxHome(@NotNull String playerUuid, @NotNull int amount) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "INSERT INTO `utilities_max_homes`(`playerUuid`, `maxHomes`, `isRelative`) VALUES ('",
+                        playerUuid + "', ",
+                        amount + ", ",
+                        "true) ",
+                        "ON DUPLICATE KEY UPDATE ",
+                        "`maxHomes` = maxHomes + " + amount + ", ",
+                        "`isRelative` = true"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public void subtractMaxHome(@NotNull String playerUuid, @NotNull int amount) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "INSERT INTO `utilities_max_homes`(`playerUuid`, `maxHomes`, `isRelative`) VALUES ('",
+                        playerUuid + "', ",
+                        "-" + amount + ", ",
+                        "true) ",
+                        "ON DUPLICATE KEY UPDATE ",
+                        "`maxHomes` = maxHomes - " + amount + ", ",
+                        "`isRelative` = true"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public void setMaxHome(@NotNull String playerUuid, @NotNull int amount) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "INSERT INTO `utilities_max_homes`(`playerUuid`, `maxHomes`, `isRelative`) VALUES ('",
+                        playerUuid + "', ",
+                        amount + ", ",
+                        "true) ",
+                        "ON DUPLICATE KEY UPDATE ",
+                        "`maxHomes` = maxHomes + " + amount + ", ",
+                        "`isRelative` = false"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public void resetMaxHome(@NotNull String playerUuid) {
+        BukkitRunnable runnable = new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {
+                    statement.execute(String.join("",
+                        "DELETE FROM `utilities_max_homes` WHERE ",
+                        "`playerUuid` = '" + playerUuid + "'"
+                    ));
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        runnable.runTaskAsynchronously(plugin);
+    }
+
+    public @Nullable ResultSet getMaxHomes() {
+        try {
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM `utilities_max_homes`");
+            return resultSet;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -181,7 +295,7 @@ public class Database {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    public ResultSet getSpawn() {
+    public @Nullable ResultSet getSpawn() {
         try {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM `utilities_homes` WHERE `id` = 1");
             return resultSet;
@@ -212,7 +326,7 @@ public class Database {
         runnable.runTaskAsynchronously(plugin);
     }
 
-    public ResultSet getPlayersLastLocations() {
+    public @Nullable ResultSet getPlayersLastLocations() {
         try {
             ResultSet resultSet = statement.executeQuery("SELECT * FROM `utilities_last_locations`");
             return resultSet;
