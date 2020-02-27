@@ -1,6 +1,7 @@
 package fr.neolithic.utilities.commands;
 
 import java.util.List;
+import java.util.Scanner;
 
 import com.google.common.collect.Lists;
 
@@ -81,6 +82,53 @@ public class MiscellaneousExecutor implements TabExecutor {
                     }
 
                     player.sendMessage("§cUsage : /fly [username]");
+                    return false;
+
+                case "flyspeed":
+                    if (args.length == 2) {
+                        if (isInteger(args[0])) {
+                            int speed = Integer.parseInt(args[0]);
+
+                            if (speed >= 0 && speed <= 20) {
+                                Player target = Bukkit.getPlayer(args[1]);
+
+                                if (target != null && target.isOnline()) {
+                                    target.setFlySpeed(0.05f * speed);
+                                    target.sendMessage("§eTa vitesse de fly a été réglé à " + String.valueOf(speed));
+                                    player.sendMessage("§eLa vitesse de fly de '" + target.getName() + "' a été réglé à " + String.valueOf(speed));
+                                    return true;
+                                }
+
+                                player.sendMessage("§cLe joueur '" + args[1] + "' n'existe pas ou n'est pas en ligne");
+                                return false;
+                            }
+                        
+                            player.sendMessage("§cLa valeur du speed doit être un nombre entier compris entre 0 et 20");
+                            return false;
+                        }
+                        
+                        player.sendMessage("§cLa valeur du speed doit être un nombre entier compris entre 0 et 20");
+                        return false;
+                    }
+                    else if (args.length == 1) {
+                        if (isInteger(args[0])) {
+                            int speed = Integer.parseInt(args[0]);
+
+                            if (speed >= 0 && speed <= 20) {
+                                player.setFlySpeed(0.05f * speed);
+                                player.sendMessage("§eTa vitesse de fly à été réglé à " + String.valueOf(speed));
+                                return true;
+                            }
+                        
+                            player.sendMessage("§cLa valeur du speed doit être un nombre entier compris entre 0 et 20");
+                            return false;
+                        }
+                        
+                        player.sendMessage("§cLa valeur du speed doit être un nombre entier compris entre 0 et 20");
+                        return false;
+                    }
+
+                    player.sendMessage("§cUsage : /flyspeed <speed> [username]");
                     return false;
                 
                 case "god":
@@ -208,5 +256,12 @@ public class MiscellaneousExecutor implements TabExecutor {
         }
         
         return null;
+    }
+
+    public boolean isInteger(String str) {
+        Scanner scanner = new Scanner(str.trim());
+        if (!scanner.hasNextInt()) return false;
+        scanner.nextInt();
+        return !scanner.hasNext();
     }
 }

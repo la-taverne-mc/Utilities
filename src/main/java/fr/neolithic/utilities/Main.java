@@ -56,6 +56,7 @@ public class Main extends JavaPlugin {
         MiscellaneousExecutor miscellaneousExecutor = new MiscellaneousExecutor(playersLastLocation);
         getCommand("back").setExecutor(miscellaneousExecutor);
         getCommand("fly").setExecutor(miscellaneousExecutor);
+        getCommand("flyspeed").setExecutor(miscellaneousExecutor);
         getCommand("god").setExecutor(miscellaneousExecutor);
         getCommand("heal").setExecutor(miscellaneousExecutor);
         getCommand("feed").setExecutor(miscellaneousExecutor);

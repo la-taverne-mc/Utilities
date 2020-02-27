@@ -47,6 +47,9 @@ commands:
   fly:
     description: "Toggle fly"
     permission: utilities.fly
+  flyspeed:
+    description: "Set your fly speed or the fly speed of an other player"
+    permission: utilities.flyspeed
   god:
     description: "Toggle godmode"
     permission: utilities.god
@@ -91,6 +94,8 @@ permissions:
       utilities.back.ondeath:
         default: true
       utilities.fly:
+        default: op
+      utilities.flyspeed:
         default: op
       utilities.god:
         default: op
