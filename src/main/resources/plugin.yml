@@ -59,6 +59,21 @@ commands:
   feed:
     description: "Feed yourself or a targeted player"
     permission: utilities.feed
+  gm:
+    description: "Change your gamemode or the gamemode of another player"
+    permission: utilities.gamemode
+  gms:
+    description: "Set your gamemode or the gamemode of another player to survival"
+    permission: utilities.gamemode
+  gmc:
+    description: "Set your gamemode or the gamemode of another player to creative"
+    permission: utilities.gamemode
+  gma:
+    description: "Set your gamemode or the gamemode of another player to adventure"
+    permission: utilities.gamemode
+  gmsp:
+    description: "Set your gamemode or the gamemode of another player to spectator"
+    permission: utilities.gamemode
 permissions:
   utilities.*:
     default: false
@@ -102,4 +117,6 @@ permissions:
       utilities.heal:
         default: op
       utilities.feed:
+        default: op
+      utilities.gamemode:
         default: op

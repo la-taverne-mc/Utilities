@@ -3,6 +3,7 @@ package fr.neolithic.utilities;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.neolithic.utilities.commands.GamemodeExecutor;
 import fr.neolithic.utilities.commands.HomesExecutor;
 import fr.neolithic.utilities.commands.MiscellaneousExecutor;
 import fr.neolithic.utilities.commands.SpawnExecutor;
@@ -60,6 +61,13 @@ public class Main extends JavaPlugin {
         getCommand("god").setExecutor(miscellaneousExecutor);
         getCommand("heal").setExecutor(miscellaneousExecutor);
         getCommand("feed").setExecutor(miscellaneousExecutor);
+
+        GamemodeExecutor gamemodeExecutor = new GamemodeExecutor();
+        getCommand("gm").setExecutor(gamemodeExecutor);
+        getCommand("gms").setExecutor(gamemodeExecutor);
+        getCommand("gmc").setExecutor(gamemodeExecutor);
+        getCommand("gma").setExecutor(gamemodeExecutor);
+        getCommand("gmsp").setExecutor(gamemodeExecutor);
     }
 
     private void loadDatabase() {
