@@ -1,7 +1,6 @@
 package fr.neolithic.utilities.commands;
 
 import java.util.List;
-import java.util.Scanner;
 
 import com.google.common.collect.Lists;
 
@@ -15,10 +14,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.Database;
-import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
-import fr.neolithic.utilities.utilities.homes.Homes;
-import fr.neolithic.utilities.utilities.homes.MaxHomes;
+import fr.neolithic.utilities.utils.Database;
+import fr.neolithic.utilities.utils.IntegerUtils;
+import fr.neolithic.utilities.utils.back.PlayersLastLocation;
+import fr.neolithic.utilities.utils.homes.Homes;
+import fr.neolithic.utilities.utils.homes.MaxHomes;
 
 public class HomesExecutor implements TabExecutor {
     private Homes homes;
@@ -179,7 +179,7 @@ public class HomesExecutor implements TabExecutor {
                         int amount = 1;
                         
                         if (args.length == 2) {
-                            if (isInteger(args[1])) {
+                            if (IntegerUtils.isInteger(args[1])) {
                                 amount = Integer.parseInt(args[1]);
                             }
                             else {
@@ -218,7 +218,7 @@ public class HomesExecutor implements TabExecutor {
                         int amount = 1;
                         
                         if (args.length == 2) {
-                            if (isInteger(args[1])) {
+                            if (IntegerUtils.isInteger(args[1])) {
                                 amount = Integer.parseInt(args[1]);
                             }
                             else {
@@ -254,7 +254,7 @@ public class HomesExecutor implements TabExecutor {
                     target = Bukkit.getPlayer(args[0]);
 
                     if (target != null && target.isOnline()) {
-                        if (isInteger(args[1])) {
+                        if (IntegerUtils.isInteger(args[1])) {
                             int amount = Integer.parseInt(args[1]);
 
                             if (amount == 1) {
@@ -321,12 +321,5 @@ public class HomesExecutor implements TabExecutor {
         }
         
         return null;
-    }
-
-    public boolean isInteger(String str) {
-        Scanner scanner = new Scanner(str.trim());
-        if (!scanner.hasNextInt()) return false;
-        scanner.nextInt();
-        return !scanner.hasNext();
     }
 }

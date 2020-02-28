@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities;
+package fr.neolithic.utilities.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.back.SerializedPlayerLastLocation;
-import fr.neolithic.utilities.utilities.homes.SerializedHome;
+import fr.neolithic.utilities.utils.back.SerializedPlayerLastLocation;
+import fr.neolithic.utilities.utils.homes.SerializedHome;
 
 public class Database {
     private Plugin plugin;

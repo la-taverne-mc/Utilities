@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities.homes;
+package fr.neolithic.utilities.utils.homes;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +14,8 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.Database;
+import fr.neolithic.utilities.utils.Database;
+import fr.neolithic.utilities.utils.LocationUtils;
 
 public class Homes {
     private HashMap<UUID, PlayerHomes> homes = new HashMap<UUID, PlayerHomes>();
@@ -53,8 +54,8 @@ public class Homes {
     public boolean addHome(@NotNull UUID playerUuid, @NotNull String home, @NotNull Location location) {
         if (!homes.containsKey(playerUuid)) homes.put(playerUuid, new PlayerHomes(playerUuid));
 
-        if (homes.get(playerUuid).addHome(home, getApproximativeLocation(location))) {
-            db.addHome(new SerializedHome(playerUuid, home, getApproximativeLocation(location)));
+        if (homes.get(playerUuid).addHome(home, LocationUtils.getApproximativeLocation(location))) {
+            db.addHome(new SerializedHome(playerUuid, home, LocationUtils.getApproximativeLocation(location)));
             return true;
         }
 
@@ -109,44 +110,5 @@ public class Homes {
         }
 
         return serializedHomes;
-    }
-
-    private Location getApproximativeLocation(@NotNull Location location) {
-        double x = closest(new double[] {location.getBlockX() - 0.5f, location.getBlockX() + 0.5f}, location.getX());
-        double z = closest(new double[] {location.getBlockZ() - 0.5f, location.getBlockZ() + 0.5f}, location.getZ());
-        float yaw = closest(new float[] {-180.f, -90.f, 0.f, 90.f, 180.f}, location.getYaw());
-        float pitch = closest(new float[] {-90.f, -45.f, 0.f, 45.f, 90.f}, location.getPitch());
-        
-        return new Location(location.getWorld(), x, location.getBlockY(), z, yaw, pitch);
-    }
-
-    private float closest(@NotNull float[] numbers, @NotNull float number) {
-        float distance = Math.abs(numbers[0] - number);
-        int idx = 0;
-
-        for (int i = 0; i < numbers.length; i++) {
-            float idistance = Math.abs(numbers[i] - number);
-            if (idistance < distance) {
-                idx = i;
-                distance = idistance;
-            }
-        }
-
-        return numbers[idx];
-    }
-
-    private double closest(@NotNull double[] numbers, @NotNull double number) {
-        double distance = Math.abs(numbers[0] - number);
-        int idx = 0;
-
-        for (int i = 0; i < numbers.length; i++) {
-            double idistance = Math.abs(numbers[i] - number);
-            if (idistance < distance) {
-                idx = i;
-                distance = idistance;
-            }
-        }
-
-        return numbers[idx];
     }
 }

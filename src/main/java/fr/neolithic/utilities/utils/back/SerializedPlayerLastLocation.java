@@ -1,23 +1,21 @@
-package fr.neolithic.utilities.utilities.homes;
+package fr.neolithic.utilities.utils.back;
 
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
-public final class SerializedHome {
-    private final String uuid;
-    private final String home;
-    private final String worldUuid;
-    private final double x;
-    private final double y;
-    private final double z;
-    private final float yaw;
-    private final float pitch;
+public final class SerializedPlayerLastLocation {
+    private String playerUuid;
+    private String worldUuid;
+    private double x;
+    private double y;
+    private double z;
+    private float yaw;
+    private float pitch;
 
-    public SerializedHome(@NotNull UUID uuid, @NotNull String home, @NotNull Location location) {
-        this.uuid = uuid.toString();
-        this.home = home;
+    public SerializedPlayerLastLocation(@NotNull UUID playerUuid, @NotNull Location location) {
+        this.playerUuid = playerUuid.toString();
         this.worldUuid = location.getWorld().getUID().toString();
         this.x = location.getX();
         this.y = location.getY();
@@ -26,9 +24,8 @@ public final class SerializedHome {
         this.pitch = location.getPitch();
     }
 
-    public SerializedHome(@NotNull String uuid, @NotNull String home, @NotNull String worldUuid, @NotNull double x, @NotNull double y, @NotNull double z, @NotNull float yaw, @NotNull float pitch) {
-        this.uuid = uuid;
-        this.home = home;
+    public SerializedPlayerLastLocation(@NotNull String playerUuid, @NotNull String worldUuid, @NotNull double x, @NotNull double y, @NotNull double z, @NotNull float yaw, @NotNull float pitch) {
+        this.playerUuid = playerUuid;
         this.worldUuid = worldUuid;
         this.x = x;
         this.y = y;
@@ -37,18 +34,16 @@ public final class SerializedHome {
         this.pitch = pitch;
     }
 
-    public String uuid() { return uuid; }
-    public String home() { return home; }
+    public String playerUuid() { return playerUuid; }
     public String worldUuid() { return worldUuid; }
     public double x() { return x; }
     public double y() { return y; }
     public double z() { return z; }
     public float yaw() { return yaw; }
-    public float pitch() {return pitch; }
+    public float pitch() { return pitch; }
 
     public String toString() {
-        String str = uuid;
-        str += ", " + home;
+        String str = playerUuid;
         str += ", " + worldUuid;
         str += ", " + String.valueOf(x);
         str += ", " + String.valueOf(y);

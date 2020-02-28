@@ -1,7 +1,6 @@
 package fr.neolithic.utilities.commands;
 
 import java.util.List;
-import java.util.Scanner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -11,6 +10,8 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import fr.neolithic.utilities.utils.IntegerUtils;
 
 public class GamemodeExecutor implements TabExecutor {
     @Override
@@ -36,7 +37,7 @@ public class GamemodeExecutor implements TabExecutor {
                         }
                     }
 
-                    if (isInteger(args[0])) {
+                    if (IntegerUtils.isInteger(args[0])) {
                         int gamemode = Integer.parseInt(args[0]);
                         switch (gamemode) {
                             case 0:
@@ -189,7 +190,7 @@ public class GamemodeExecutor implements TabExecutor {
                         return false;
                     }
 
-                    if (isInteger(args[0])) {
+                    if (IntegerUtils.isInteger(args[0])) {
                         int gamemode = Integer.parseInt(args[0]);
                         switch (gamemode) {
                             case 0:
@@ -307,12 +308,5 @@ public class GamemodeExecutor implements TabExecutor {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return null;
-    }
-
-    public boolean isInteger(String str) {
-        Scanner scanner = new Scanner(str.trim());
-        if (!scanner.hasNextInt()) return false;
-        scanner.nextInt();
-        return !scanner.hasNext();
     }
 }

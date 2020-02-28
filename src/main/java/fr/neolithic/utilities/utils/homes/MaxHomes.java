@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities.homes;
+package fr.neolithic.utilities.utils.homes;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +8,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import fr.neolithic.utilities.utilities.Database;
+import fr.neolithic.utilities.utils.Database;
 
 public class MaxHomes {
     private Database db;

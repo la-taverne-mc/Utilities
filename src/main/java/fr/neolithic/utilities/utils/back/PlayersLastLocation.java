@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities.back;
+package fr.neolithic.utilities.utils.back;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.Database;
+import fr.neolithic.utilities.utils.Database;
 
 public class PlayersLastLocation {
     private HashMap<UUID, Location> playersLastLocation = new HashMap<UUID, Location>();

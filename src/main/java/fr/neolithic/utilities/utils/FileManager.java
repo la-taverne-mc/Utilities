@@ -1,4 +1,4 @@
-package fr.neolithic.utilities.utilities;
+package fr.neolithic.utilities.utils;
 
 import java.io.File;
 import java.io.IOException;

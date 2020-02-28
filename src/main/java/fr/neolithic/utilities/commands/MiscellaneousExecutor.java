@@ -1,7 +1,6 @@
 package fr.neolithic.utilities.commands;
 
 import java.util.List;
-import java.util.Scanner;
 
 import com.google.common.collect.Lists;
 
@@ -14,7 +13,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
+import fr.neolithic.utilities.utils.IntegerUtils;
+import fr.neolithic.utilities.utils.back.PlayersLastLocation;
 
 public class MiscellaneousExecutor implements TabExecutor {
     private PlayersLastLocation playersLastLocation;
@@ -86,7 +86,7 @@ public class MiscellaneousExecutor implements TabExecutor {
 
                 case "flyspeed":
                     if (args.length == 2) {
-                        if (isInteger(args[0])) {
+                        if (IntegerUtils.isInteger(args[0])) {
                             int speed = Integer.parseInt(args[0]);
 
                             if (speed >= 0 && speed <= 20) {
@@ -111,7 +111,7 @@ public class MiscellaneousExecutor implements TabExecutor {
                         return false;
                     }
                     else if (args.length == 1) {
-                        if (isInteger(args[0])) {
+                        if (IntegerUtils.isInteger(args[0])) {
                             int speed = Integer.parseInt(args[0]);
 
                             if (speed >= 0 && speed <= 20) {
@@ -256,12 +256,5 @@ public class MiscellaneousExecutor implements TabExecutor {
         }
         
         return null;
-    }
-
-    public boolean isInteger(String str) {
-        Scanner scanner = new Scanner(str.trim());
-        if (!scanner.hasNextInt()) return false;
-        scanner.nextInt();
-        return !scanner.hasNext();
     }
 }

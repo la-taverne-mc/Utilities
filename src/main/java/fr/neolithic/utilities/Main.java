@@ -7,9 +7,9 @@ import fr.neolithic.utilities.commands.GamemodeExecutor;
 import fr.neolithic.utilities.commands.HomesExecutor;
 import fr.neolithic.utilities.commands.MiscellaneousExecutor;
 import fr.neolithic.utilities.commands.SpawnExecutor;
-import fr.neolithic.utilities.utilities.Database;
-import fr.neolithic.utilities.utilities.FileManager;
-import fr.neolithic.utilities.utilities.back.PlayersLastLocation;
+import fr.neolithic.utilities.utils.Database;
+import fr.neolithic.utilities.utils.FileManager;
+import fr.neolithic.utilities.utils.back.PlayersLastLocation;
 
 public class Main extends JavaPlugin {
     private Database db;
