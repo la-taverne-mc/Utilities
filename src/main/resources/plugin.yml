@@ -4,6 +4,8 @@ name: Utilities
 version: "1.0"
 author: PoC4
 main: fr.neolithic.utilities.Main
+depend:
+  - Vault
 commands:
   addmaxhomes:
     description: "Add one or the specified amount of max homes to a player"
@@ -119,4 +121,6 @@ permissions:
       utilities.feed:
         default: op
       utilities.gamemode:
+        default: op
+      utilities.chatcolors:
         default: op

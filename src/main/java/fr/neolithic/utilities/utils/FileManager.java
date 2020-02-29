@@ -8,16 +8,16 @@ import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.Plugin;
 
 public class FileManager {
-    private JavaPlugin plugin;
+    private Plugin plugin;
     private String filename;
 
     private File file;
     private FileConfiguration fileConfiguration;
 
-    public FileManager(JavaPlugin plugin, String filename) {
+    public FileManager(Plugin plugin, String filename) {
         if (plugin == null) {
             throw new IllegalArgumentException("plugin cannot be null");
         }

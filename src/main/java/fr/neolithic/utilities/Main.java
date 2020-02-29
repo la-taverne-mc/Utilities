@@ -1,5 +1,6 @@
 package fr.neolithic.utilities;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -7,8 +8,10 @@ import fr.neolithic.utilities.commands.GamemodeExecutor;
 import fr.neolithic.utilities.commands.HomesExecutor;
 import fr.neolithic.utilities.commands.MiscellaneousExecutor;
 import fr.neolithic.utilities.commands.SpawnExecutor;
+import fr.neolithic.utilities.listeners.ChatListeners;
 import fr.neolithic.utilities.utils.Database;
 import fr.neolithic.utilities.utils.FileManager;
+import fr.neolithic.utilities.utils.StringUtils;
 import fr.neolithic.utilities.utils.back.PlayersLastLocation;
 
 public class Main extends JavaPlugin {
@@ -26,6 +29,7 @@ public class Main extends JavaPlugin {
         playersLastLocation = new PlayersLastLocation(db);
 
         registerCommands();
+        registerListeners();
 
         System.out.println("[Utilities] Successfully Enabled Utilities v1.0");
     }
@@ -70,6 +74,11 @@ public class Main extends JavaPlugin {
         getCommand("gmsp").setExecutor(gamemodeExecutor);
     }
 
+    private void registerListeners() {
+        ChatListeners chatListeners = new ChatListeners();
+        Bukkit.getPluginManager().registerEvents(chatListeners, this);
+    }
+
     private void loadDatabase() {
         saveFile = new FileManager(this, "database.yml");
         saveFile.saveDefault();
@@ -81,13 +90,8 @@ public class Main extends JavaPlugin {
         String username = saveContent.getString("username");
         String password = saveContent.getString("password");
 
-        if (isNullOrEmpty(host) || isNullOrEmpty(database) || isNullOrEmpty(username) || isNullOrEmpty(password) || port == null)
-            return;
+        if (StringUtils.isNullOrEmpty(host) || StringUtils.isNullOrEmpty(database) || StringUtils.isNullOrEmpty(username) || StringUtils.isNullOrEmpty(password) || port == null) return;
 
         db = new Database(this, host, port, database, username, password);
-    }
-
-    private boolean isNullOrEmpty(String str) {
-        return str == null || str.isEmpty();
     }
 }
