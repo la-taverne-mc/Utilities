@@ -18,6 +18,7 @@ public class DeathListener implements Listener {
     @EventHandler
     public void onPlayerDeath(EntityDeathEvent event) {
         if (event.getEntityType() == EntityType.PLAYER) {
+            event.getEntity().sendMessage("§eFait §c/back §epour revenir à l'emplacement de ta mort");
             playersLastLocation.setPlayerLastLocation(event.getEntity().getUniqueId(), event.getEntity().getLocation());
         }
     }
