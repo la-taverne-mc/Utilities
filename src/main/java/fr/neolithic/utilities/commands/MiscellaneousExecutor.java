@@ -61,7 +61,7 @@ public class MiscellaneousExecutor implements TabExecutor {
                                     teleportPlayer.runTask(Bukkit.getPluginManager().getPlugin("Utilities"));
                                 }
                                 else {
-                                    player.sendMessage("§cIl n'y a pas d'endroit sûr aux alentours de l'endroit où tu veux te téléporter\nSi tu veux quand même t'y téléporter fait : §l§n/back confirm");
+                                    player.sendMessage("§cIl n'y a pas d'endroit sûr aux alentours de l'endroit où tu veux te téléporter\nSi tu veux quand même t'y téléporter fais : §l§n/back confirm");
                                 }
                             }
                         };
