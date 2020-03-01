@@ -10,10 +10,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.neolithic.utilities.utils.IntegerUtils;
+import fr.neolithic.utilities.utils.LocationUtils;
 import fr.neolithic.utilities.utils.back.PlayersLastLocation;
 
 public class MiscellaneousExecutor implements TabExecutor {
@@ -31,11 +33,41 @@ public class MiscellaneousExecutor implements TabExecutor {
             switch (command.getName().toLowerCase()) {
                 case "back":
                     Location lastLocation = playersLastLocation.getPlayerLastLocation(player.getUniqueId());
-
+                    
                     if (lastLocation != null) {
-                        player.sendMessage("§eTéléportation en cours...");
-                        playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
-                        player.teleport(lastLocation);
+                        if (args.length > 0 && args[0].equalsIgnoreCase("confirm")) {
+                            player.sendMessage("§eTéléportation en cours...");
+                            playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
+                            player.teleport(lastLocation);
+                            return true;
+                        }
+
+                        BukkitRunnable runnable = new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                player.sendMessage("§eTéléportation en cours...");
+                                Location safeLocation = LocationUtils.getNearestSafeLocation(lastLocation);
+
+                                if (safeLocation != null) {
+                                    playersLastLocation.setPlayerLastLocation(player.getUniqueId(), player.getLocation());
+                                    
+                                    BukkitRunnable teleportPlayer = new BukkitRunnable() {
+                                        @Override
+                                        public void run() {
+                                            player.teleport(safeLocation);
+                                        }
+                                    };
+
+                                    teleportPlayer.runTask(Bukkit.getPluginManager().getPlugin("Utilities"));
+                                }
+                                else {
+                                    player.sendMessage("§cIl n'y a pas d'endroit sûr aux alentours de l'endroit où tu veux te téléporter\nSi tu veux quand même t'y téléporter fait : §l§n/back confirm");
+                                }
+                            }
+                        };
+
+                        runnable.runTaskAsynchronously(Bukkit.getPluginManager().getPlugin("Utilities"));
+                        
                         return true;
                     }
                     

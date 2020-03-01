@@ -9,6 +9,7 @@ import fr.neolithic.utilities.commands.HomesExecutor;
 import fr.neolithic.utilities.commands.MiscellaneousExecutor;
 import fr.neolithic.utilities.commands.SpawnExecutor;
 import fr.neolithic.utilities.listeners.ChatListeners;
+import fr.neolithic.utilities.listeners.DeathListener;
 import fr.neolithic.utilities.utils.Database;
 import fr.neolithic.utilities.utils.FileManager;
 import fr.neolithic.utilities.utils.StringUtils;
@@ -77,6 +78,9 @@ public class Main extends JavaPlugin {
     private void registerListeners() {
         ChatListeners chatListeners = new ChatListeners();
         Bukkit.getPluginManager().registerEvents(chatListeners, this);
+
+        DeathListener deathListener = new DeathListener(playersLastLocation);
+        Bukkit.getPluginManager().registerEvents(deathListener, this);
     }
 
     private void loadDatabase() {
